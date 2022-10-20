@@ -12,5 +12,5 @@ new_df = df.loc[:, ["iyear", "imonth", "iday", "country_txt", "region_txt", "lat
 
 
 
-print(new_df["accident_date"])
+print(new_df.head())
 
