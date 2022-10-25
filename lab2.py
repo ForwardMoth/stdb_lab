@@ -1,4 +1,8 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
 pd.set_option('display.max_columns', 15)
 pd.set_option('display.width', 2000)
@@ -8,27 +12,27 @@ df = pd.read_csv("task/globalterrorismdb_0718dist.csv", encoding='ISO-8859-1', l
 # print(df.head())
 
 df.rename(columns={'iyear': 'year', 'imonth': 'month', 'iday': 'day'}, inplace=True)
-# print(df.head())
-
+#print(df.head())
+#
 # 2 задание
 df2 = df.loc[:, ["year", "month", "day", "country_txt", "region_txt", "latitude", "longitude"]]
-# print(df2)
-
+#print(df2)
+#
 df2 = df2.loc[(df2["month"] != 0) & (df2['day'] != 0)]
 df2['accident_date'] = pd.to_datetime(df2.loc[:, ["year", "month", "day"]].astype(str))
-# print(df2)
-
+#print(df2)
+#
 # 3 задание
 columns = list(df2.columns)
 new_column_order = columns[3:5] + columns[:3] + columns[-3:-1] + columns[-1:]
-
+#
 df3 = df2.reindex(columns=new_column_order)
 df3.sort_values(by=new_column_order[:-1], inplace=True)
-# print(df3)
+#print(df3)
 
-# ascending_order = [False, False, True, True, True, False, False]
-# df3.sort_values(by=new_column_order[:-1], ascending=ascending_order, inplace=True)
-# print(df3)
+ascending_order = [False, False, True, True, True, False, False]
+df3.sort_values(by=new_column_order[:-1], ascending=ascending_order, inplace=True)
+#print(df3)
 
 # 4 задание
 month_count = df3['country_txt'].value_counts()  # сразу делает по убыванию
@@ -64,4 +68,43 @@ df_month_count = pd.DataFrame({'month': month_count.index, 'month_count': month_
 # print(df_month_count)
 
 df7 = df6.merge(df_month_count, how='right', on=['month'])
-# print(df7)
+#print(df7)
+
+# 8 задание
+def abs_max_scale(series):
+    return series / series.abs().max()
+
+df7['month'] = abs_max_scale(df7['month'])
+
+df7['month_count'] = abs_max_scale(df7['month_count'])
+#for col in [df7['month'], df7['month_count']]:
+ #   df7[col] = abs_max_scale(df7[col])
+
+#print(df7)
+# 9 задание
+#df7['month'].plot(kind = 'bar')
+
+# fig, axs = plt.subplots(1, 2)
+# n_bins = len(df7)
+# axs[0].hist(df7['month'], bins=n_bins)
+# axs[0].set_title('month')
+# axs[1].hist(df7['month_count'], bins=n_bins)
+# axs[1].set_title('month_count')
+
+h = df7['month'].hist()
+fig = h.get_figure()
+#
+h = df7['month_count'].hist()
+fig = h.get_figure()
+#
+# x = np.arange(-3, 3, 0.001)
+#
+# plt.plot(x, norm. pdf(x, 0, 1))
+
+# 10 задание
+model = LinearRegression().fit(df7['month'], df7['month_count'])
+
+r_sq = model.score(df7['month'], df7['month_count'])
+print('coefficient of determination:', r_sq)
+print('intercept:', model.intercept_)
+print('slope:', model.coef_)
