@@ -6,6 +6,7 @@ import numpy as np
 from sklearn import preprocessing
 from sklearn.linear_model import LinearRegression
 from statsmodels.regression import linear_model
+import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns', 15)
 pd.set_option('display.width', 2000)
@@ -79,18 +80,46 @@ def abs_max_scale(series):
     return series / series.abs().max()
 
 def abs_max_scale2(series):
-    return series - series.min / series.max() - series.min()
+    return series - series.min() / series.max() - series.min()
 
 #построить 2 диаграммы по двум методам
-df7['month'] = abs_max_scale(df7['month'])
-df7['month_count'] = abs_max_scale(df7['month_count'])
-print(df7)
+# df7['month'] = abs_max_scale(df7['month'])
+# df7['month_count'] = abs_max_scale(df7['month_count'])
+# print(df7)
+#
+# df7['month'] = abs_max_scale2(df7['month'])
+# df7['month_count'] = abs_max_scale2(df7['month_count'])
+# print(df7)
 
-list10_norm = preprocessing.normalize(df_month_count)
-print(list10_norm)
-df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
-print(df10_norm)
+df_month_count['month'] = abs_max_scale(df_month_count['month'])
+df_month_count['month_count'] = abs_max_scale(df_month_count['month_count'])
+histData = plt.hist(df_month_count['month'], edgecolor='black')
+plt.show()
 
+# df_month_count['month'] = abs_max_scale2(df_month_count['month'])
+# df_month_count['month_count'] = abs_max_scale2(df_month_count['month_count'])
+# histData = plt.hist(df_month_count['month'], edgecolor='black')
+# plt.show()
+
+# list10_norm = preprocessing.normalize(df_month_count)
+# print(list10_norm)
+# df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
+# print(df10_norm)
+#
+# histData = plt.hist(df10_norm["count"], edgecolor='black')
+# plt.show()
+# onlymonth = df10_norm["month"]
+
+# bin_ranges = [0, 1]
+# sns_plot = sns.distplot(df10_norm['month'])
+# fig = sns_plot.get_figure()
+
+# fig, axs = plt.subplots(12, 2)
+# n_bins = len(df10_norm)
+# axs[0].hist(df10_norm['sepal length (cm)'], bins=n_bins)
+# axs[0].set_title('sepal length')
+# axs[1].hist(df10_norm['petal length (cm)'], bins=n_bins)
+# axs[1].set_title('petal length')
 
 
 # 9 задание
