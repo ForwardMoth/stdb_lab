@@ -62,8 +62,7 @@ first_quantile = stat_analysis.iloc[4, 6]
 third_quantile = stat_analysis.iloc[6, 6]
 # print(third_quantile)
 
-df_234quantile = df4[df4["count"] > first_quantile]
-df6 = df_234quantile[df_234quantile["count"] < third_quantile]
+df6 = df4[(df4["count"] > first_quantile) & (df4["count"] < third_quantile)]
 # print(df6)
 
 # 7 задание
@@ -83,8 +82,8 @@ def abs_max_scale2(series):
     return series - series.min() / series.max() - series.min()
 
 #построить 2 диаграммы по двум методам
-# df7['month'] = abs_max_scale(df7['month'])
-# df7['month_count'] = abs_max_scale(df7['month_count'])
+df7['month'] = abs_max_scale(df7['month'])
+df7['month_count'] = abs_max_scale(df7['month_count'])
 # print(df7)
 #
 # df7['month'] = abs_max_scale2(df7['month'])
@@ -93,18 +92,19 @@ def abs_max_scale2(series):
 
 df_month_count['month'] = abs_max_scale(df_month_count['month'])
 df_month_count['month_count'] = abs_max_scale(df_month_count['month_count'])
-histData = plt.hist(df_month_count['month'], edgecolor='black')
-plt.show()
+# histData = plt.hist(df_month_count['month'], edgecolor='black')
+# plt.show()
 
 # df_month_count['month'] = abs_max_scale2(df_month_count['month'])
 # df_month_count['month_count'] = abs_max_scale2(df_month_count['month_count'])
 # histData = plt.hist(df_month_count['month'], edgecolor='black')
 # plt.show()
 
-# list10_norm = preprocessing.normalize(df_month_count)
+list10_norm = preprocessing.normalize(df_month_count)
 # print(list10_norm)
-# df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
+df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
 # print(df10_norm)
+
 #
 # histData = plt.hist(df10_norm["count"], edgecolor='black')
 # plt.show()
@@ -113,7 +113,7 @@ plt.show()
 # bin_ranges = [0, 1]
 # sns_plot = sns.distplot(df10_norm['month'])
 # fig = sns_plot.get_figure()
-
+#
 # fig, axs = plt.subplots(12, 2)
 # n_bins = len(df10_norm)
 # axs[0].hist(df10_norm['sepal length (cm)'], bins=n_bins)
@@ -123,8 +123,8 @@ plt.show()
 
 
 # 9 задание
-# df7['month'].plot(kind = 'bar')
-#
+# df7['month'].plot(kind='bar')
+
 # fig, axs = plt.subplots(1, 2)
 # n_bins = len(df7)
 # axs[0].hist(df7['month'], bins=n_bins)
@@ -137,55 +137,61 @@ plt.show()
 # #
 # h = df7['month_count'].hist()
 # fig = h.get_figure()
-
+#
 # x = np.arange(-3, 3, 0.001)
 #
 # plt.plot(x, norm.pdf(x, 0, 1))
 
+
+
 # 10 задание
-# list10_norm = preprocessing.normalize(df_month_count)
-# # print(list10_norm)
-# df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
-# # print(df10_norm)
+list10_norm = preprocessing.normalize(df_month_count)
+# print(list10_norm)
+df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
+# print(df10_norm)
+
+x = np.array(df10_norm['month']).reshape(-1, 1)
+y = np.array(df10_norm['count'])
+
 #
-# x = np.array(df10_norm['month']).reshape(-1, 1)
-# y = np.array(df10_norm['count'])
-#
-# model = LinearRegression().fit(x, y)
-# R_sq = model.score(x, y)
+model = LinearRegression().fit(x, y)
+R_sq = model.score(x, y)
 # # The coefficients
 # print("Coefficients: \n", model.coef_)
 # print('Coefficient of determination:', R_sq)
+
 #
-# y_pred = model.predict(x)
-# # print(y_pred)
+y_pred = model.predict(x)
+
+print("predicted", y_pred)
+print("Y", y)
+
+#регрессионные остатки
+Е = y - y_pred
+
 #
-# E = model.resid
-# print(E)
-# #регрессионные остатки
-#
-# # Split the data into training/testing sets
-# diabetes_X_train = x[:-20]
-# diabetes_X_test = x[-20:]
+# Split the data into training/testing sets
+diabetes_X_train = x[:-20]
+diabetes_X_test = x[-20:]
 #
 # # Split the targets into training/testing sets
-# diabetes_y_train = y[:-20]
-# diabetes_y_test = y[-20:]
+diabetes_y_train = y[:-20]
+diabetes_y_test = y[-20:]
+
+# # Plot outputs
+# plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
+# plt.plot(diabetes_X_test, y_pred, color="blue", linewidth=3)
 #
-# # # Plot outputs
-# # plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
-# # plt.plot(diabetes_X_test, y_pred, color="blue", linewidth=3)
-# #
-# # plt.xticks(())
-# # plt.yticks(())
-# #
-# # plt.show()
+# plt.xticks(())
+# plt.yticks(())
 #
-#
-# # y_pred = model.predict(x)
-# # print(y_pred)
-# # plt.plot(x, y)
-# # plt.plot(x, y_pred)
-# # plt.show()
-#
+# plt.show()
+
+
+# y_pred = model.predict(x)
+# print(y_pred)
+# plt.plot(x, y)
+# plt.plot(x, y_pred)
+# plt.show()
+
 
