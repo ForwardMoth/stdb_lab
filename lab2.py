@@ -7,6 +7,8 @@ from sklearn import preprocessing
 from sklearn.linear_model import LinearRegression
 from statsmodels.regression import linear_model
 import matplotlib.pyplot as plt
+import scipy.stats as stats
+import pylab as pl
 
 pd.set_option('display.max_columns', 15)
 pd.set_option('display.width', 2000)
@@ -67,131 +69,116 @@ df6 = df4[(df4["count"] > first_quantile) & (df4["count"] < third_quantile)]
 
 # 7 задание
 month_count = df6['month'].value_counts()  # сразу делает по убыванию
-df_month_count = pd.DataFrame({'month': month_count.index, 'month_count': month_count.values})
-# print(df_month_count)
+df_month_count1 = pd.DataFrame({'month': month_count.index, 'month_count': month_count.values})
+df_month_count2 = df_month_count1.copy()
+# print(df_month_count1)
 
-df7 = df6.merge(df_month_count, how='right', on=['month'])
+df7 = df6.merge(df_month_count1, how='right', on=['month'])
 # print(df7)
 
-
-# 8 задание
+# 8 и 9 задание + доп задание: построить по 2 диаграммы по двум методам для month и month_count
 def abs_max_scale(series):
     return series / series.abs().max()
 
 def abs_max_scale2(series):
-    return series - series.min() / series.max() - series.min()
+    return (series - series.min()) / (series.max() - series.min())
 
 #построить 2 диаграммы по двум методам
-df7['month'] = abs_max_scale(df7['month'])
-df7['month_count'] = abs_max_scale(df7['month_count'])
-# print(df7)
-#
-# df7['month'] = abs_max_scale2(df7['month'])
-# df7['month_count'] = abs_max_scale2(df7['month_count'])
-# print(df7)
+# тут стандартизация только в month и month_count двумя способами
+# Первый метод:
+df_month_count1['month'] = abs_max_scale(df_month_count1['month'])
+df_month_count1['month_count'] = abs_max_scale(df_month_count1['month_count'])
+# print(df_month_count1)
+# Второй метод:
+df_month_count2['month'] = abs_max_scale2(df_month_count2['month'])
+df_month_count2['month_count'] = abs_max_scale2(df_month_count2['month_count'])
+# print(df_month_count2)
 
-df_month_count['month'] = abs_max_scale(df_month_count['month'])
-df_month_count['month_count'] = abs_max_scale(df_month_count['month_count'])
-# histData = plt.hist(df_month_count['month'], edgecolor='black')
-# plt.show()
+#ГРАФИКИ (когда 10ое делаем их закоментить) отсюда-до 10ого задания (97-152)
+# это гистограмма и кривые распределения по month для ПЕРВОЙ стандартизации
+df_month_count1.sort_values(by='month', inplace=True)
+fit = stats.norm.pdf(df_month_count1['month'], np.mean(df_month_count1['month']), np.std(df_month_count1['month']))
+# print(np.mean(df_month_count1['month']), np.std(df_month_count1['month']))
+pl.plot(df_month_count1['month'], fit, label='μ: 0.5417, σ: 0.3', color='green')
+pl.hist(df_month_count1['month'], edgecolor='black')
+x = np.arange(0, 1, 0.01)
+pl.plot(x, norm.pdf(x, 0.5417, 0.1), label='μ: 0.5417, σ: 0.1', color='red')
+pl.legend(title='Parameters:')
+pl.ylabel('Density')
+pl.xlabel('Month')
+pl.title('Normal Distributions (first method)', fontsize=14)
+pl.show()
 
-# df_month_count['month'] = abs_max_scale2(df_month_count['month'])
-# df_month_count['month_count'] = abs_max_scale2(df_month_count['month_count'])
-# histData = plt.hist(df_month_count['month'], edgecolor='black')
-# plt.show()
+# это гистограмма и кривые распределения по month_count для ПЕРВОЙ стандартизации !
+df_month_count1.sort_values(by='month_count', inplace=True)
+fit = stats.norm.pdf(df_month_count1['month_count'], np.mean(df_month_count1['month_count']), np.std(df_month_count1['month_count']))
+# print(np.mean(df_month_count1['month_count']), np.std(df_month_count1['month_count']))
+pl.plot(df_month_count1['month_count'], fit, label='μ: 0.8903, σ: 0.07', color='green')
+pl.hist(df_month_count1['month_count'], edgecolor='black')
+x = np.arange(0.756844, 1, 0.0001)
+pl.plot(x, norm.pdf(x, 0.8902837247523897, 0.05), label='μ: 0.8903, σ: 0.05', color='red')
+pl.legend(title='Parameters:')
+pl.ylabel('Density')
+pl.xlabel('Month_count')
+pl.title('Normal Distributions (first method)', fontsize=14)
+pl.show()
 
-list10_norm = preprocessing.normalize(df_month_count)
-# print(list10_norm)
-df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
-# print(df10_norm)
+# это гистограмма и кривые распределения по month для ВТОРОЙ стандартизации
+df_month_count2.sort_values(by='month', inplace=True)
+fit = stats.norm.pdf(df_month_count2['month'], np.mean(df_month_count2['month']), np.std(df_month_count2['month']))
+# print(np.mean(df_month_count2['month']), np.std(df_month_count2['month']))
+pl.plot(df_month_count2['month'], fit, label='μ: 0.5, σ: 0.3', color='green')
+pl.hist(df_month_count2['month'], edgecolor='black')
+x = np.arange(0, 1, 0.01)
+pl.plot(x, norm.pdf(x, 0.5, 0.1), label='μ: 0.5, σ: 0.1', color='red')
+pl.legend(title='Parameters:')
+pl.ylabel('Density')
+pl.xlabel('Month')
+pl.title('Normal Distributions (second method)', fontsize=14)
+pl.show()
 
-#
-# histData = plt.hist(df10_norm["count"], edgecolor='black')
-# plt.show()
-# onlymonth = df10_norm["month"]
-
-# bin_ranges = [0, 1]
-# sns_plot = sns.distplot(df10_norm['month'])
-# fig = sns_plot.get_figure()
-#
-# fig, axs = plt.subplots(12, 2)
-# n_bins = len(df10_norm)
-# axs[0].hist(df10_norm['sepal length (cm)'], bins=n_bins)
-# axs[0].set_title('sepal length')
-# axs[1].hist(df10_norm['petal length (cm)'], bins=n_bins)
-# axs[1].set_title('petal length')
-
-
-# 9 задание
-# df7['month'].plot(kind='bar')
-
-# fig, axs = plt.subplots(1, 2)
-# n_bins = len(df7)
-# axs[0].hist(df7['month'], bins=n_bins)
-# axs[0].set_title('month')
-# axs[1].hist(df7['month_count'], bins=n_bins)
-# axs[1].set_title('month_count')
-
-# h = df7['month'].hist()
-# fig = h.get_figure()
-# #
-# h = df7['month_count'].hist()
-# fig = h.get_figure()
-#
-# x = np.arange(-3, 3, 0.001)
-#
-# plt.plot(x, norm.pdf(x, 0, 1))
-
-
+# это гистограмма и кривые распределения по month_count для ВТОРОЙ стандартизации
+df_month_count2.sort_values(by='month_count', inplace=True)
+fit = stats.norm.pdf(df_month_count2['month_count'], np.mean(df_month_count2['month_count']), np.std(df_month_count2['month_count']))
+# print(np.mean(df_month_count2['month_count']), np.std(df_month_count2['month_count']))
+pl.plot(df_month_count2['month_count'], fit, label='μ: 0.5488, σ: 0.2886', color='green')
+pl.hist(df_month_count2['month_count'], edgecolor='black')
+x = np.arange(0, 1, 0.01)
+pl.plot(x, norm.pdf(x, 0.5488, 0.1), label='μ: 0.5488, σ: 0.1', color='red')
+pl.legend(title='Parameters:')
+pl.ylabel('Density')
+pl.xlabel('Month_count')
+pl.title('Normal Distributions (second method)', fontsize=14)
+pl.show()
 
 # 10 задание
-list10_norm = preprocessing.normalize(df_month_count)
-# print(list10_norm)
-df10_norm = pd.DataFrame(list10_norm, columns=['month', 'count'])
-# print(df10_norm)
+def linregr(df10_norm, n_of_method):
+    print(df10_norm)
+    x = np.array(df10_norm['month']).reshape(-1, 1)
+    y = np.array(df10_norm['month_count'])
 
-x = np.array(df10_norm['month']).reshape(-1, 1)
-y = np.array(df10_norm['count'])
+    model = LinearRegression().fit(x, y)
+    R_sq = model.score(x, y)
+    # The coefficients
+    # print("Coefficients: \n", model.coef_)
+    # print('Coefficient of determination:', R_sq)
 
+    y_pred = model.predict(x)
+    print("Y predicted = ", y_pred)
+    print("Y = ", y)
+    #регрессионные остатки
+    Е = y - y_pred
+
+    plt.scatter(x, y, color="black")
+    plt.plot(x, y_pred, color="blue", linewidth=3)
+    plt.ylabel('Month_count')
+    plt.xlabel('Month')
+    plt.title(f'LinearRegression ({n_of_method} method)', fontsize=14)
+    plt.show()
+
+# # Перед тем, как это запускать, закомментить графики в заданиях 8-9 (строки (97-152))
+# df10_norm = df_month_count1.copy()
+# linregr(df10_norm, 1)
 #
-model = LinearRegression().fit(x, y)
-R_sq = model.score(x, y)
-# # The coefficients
-# print("Coefficients: \n", model.coef_)
-# print('Coefficient of determination:', R_sq)
-
-#
-y_pred = model.predict(x)
-
-print("predicted", y_pred)
-print("Y", y)
-
-#регрессионные остатки
-Е = y - y_pred
-
-#
-# Split the data into training/testing sets
-diabetes_X_train = x[:-20]
-diabetes_X_test = x[-20:]
-#
-# # Split the targets into training/testing sets
-diabetes_y_train = y[:-20]
-diabetes_y_test = y[-20:]
-
-# # Plot outputs
-# plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
-# plt.plot(diabetes_X_test, y_pred, color="blue", linewidth=3)
-#
-# plt.xticks(())
-# plt.yticks(())
-#
-# plt.show()
-
-
-# y_pred = model.predict(x)
-# print(y_pred)
-# plt.plot(x, y)
-# plt.plot(x, y_pred)
-# plt.show()
-
-
+# df10_norm = df_month_count2.copy()
+# linregr(df10_norm, 2)
