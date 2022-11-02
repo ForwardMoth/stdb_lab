@@ -1,7 +1,5 @@
-# stdb_lab2
+# stdb_lab
 
-## 1. git clone https://github.com/ForwardMoth/stdb_lab2.git
-## 2. Добавить csv file в папку task
-## 3. Запустить файл lab2.py
-
-
+## 1. git clone https://github.com/ForwardMoth/stdb_lab.git
+## 2. Все csv файлы добавлять в директорию task, которая находится в директории lab 
+## 3. Чтобы всё работало запускать нужно из директории lab
