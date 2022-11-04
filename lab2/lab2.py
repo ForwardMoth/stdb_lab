@@ -172,9 +172,9 @@ def linregr(df10_norm, n_of_method):
     plt.title(f'LinearRegression ({n_of_method} method)', fontsize=14)
     plt.show()
 
-# Перед тем, как это запускать, закомментить графики в заданиях 8-9 (строки (97-152))
-df10_norm = df_month_count1.copy()
-linregr(df10_norm, 1)
-
-df10_norm = df_month_count2.copy()
-linregr(df10_norm, 2)
+# # Перед тем, как это запускать, закомментить графики в заданиях 8-9 (строки (97-152))
+# df10_norm = df_month_count1.copy()
+# linregr(df10_norm, 1)
+#
+# df10_norm = df_month_count2.copy()
+# linregr(df10_norm, 2)
