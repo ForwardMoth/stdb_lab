@@ -5,6 +5,6 @@
 ## 3. Запуск кода: 
 
 ```python 
-pip install jupyter notebook`
+pip install jupyter notebook```
 
-```jupyter notebook`
+```cmd jupyter notebook`
