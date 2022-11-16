@@ -12,7 +12,7 @@ jupyter notebook
 
 ## Лаба 4. 
 
--- Устанавливаем anaconda https://www.anaconda.com/ 
+- Устанавливаем anaconda https://www.anaconda.com/ 
 
--- Пишем в терминале conda: pip install rpy2 
+- Пишем в терминале conda: pip install rpy2 
 
