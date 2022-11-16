@@ -7,4 +7,5 @@
 ```python 
 pip install jupyter notebook
 
-cmd jupyter notebook```
+cmd jupyter notebook
+```
