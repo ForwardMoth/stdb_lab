@@ -1,8 +1,10 @@
 # stdb_lab
 
-## 1. git clone https://github.com/ForwardMoth/stdb_lab.git
-## 2. Все csv файлы добавлять в директорию task, которая находится в директории lab
-## 3. Запуск кода: 
+Основные моменты: 
+
+- Все csv файлы добавлять в директорию task, которая находится в директории lab
+
+- Запуск кода
 
 ```python 
 pip install jupyter notebook
@@ -10,9 +12,9 @@ pip install jupyter notebook
 jupyter notebook
 ```
 
-## Лаба 4. 
+- Лаба 4:  
 
-- Устанавливаем anaconda https://www.anaconda.com/ 
+* Устанавливаем anaconda https://www.anaconda.com/ 
 
-- Пишем в терминале conda: pip install rpy2 
+* Пишем в терминале conda: pip install rpy2 
 
