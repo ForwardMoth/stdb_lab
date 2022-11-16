@@ -4,11 +4,15 @@
 
 - Все csv файлы добавлять в директорию task, которая находится в директории lab
 
-- Запуск кода
+- Установка Jupyter Notebook 
 
 ```python 
 pip install jupyter notebook
+```
 
+- Запуск кода
+
+```python 
 jupyter notebook
 ```
 
